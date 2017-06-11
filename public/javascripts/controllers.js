@@ -132,6 +132,32 @@ angular.module('cs411', [])
                 )
         }
 
+        $scope.register = function () {
+
+            const request = {
+                method: 'post',
+                url   : '/auth/register',
+                data  : {
+                    name      : $scope.name,
+                    username       : $scope.username,
+                    password: $scope.password
+                }
+            }
+            $http(request)
+                .then(function (response) {
+                        $scope.authorized = true
+                    $scope.showLogin = false
+                    },
+                    function (error) {
+                        if (error.status === 401) {
+                            $scope.authorized = false
+                            $scope.h2message = "Error registering"
+                            console.log(error)
+                        }
+                    }
+                )
+        }
+
         $scope.showLoginForm = function () {
             $scope.showLogin = true
         }
