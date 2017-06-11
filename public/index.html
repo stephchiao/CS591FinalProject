@@ -38,6 +38,12 @@
             </div>
             <button type="submit" class="btn btn-primary" ng-disabled="inputForm.$invalid" ng-click="createUser()">{{buttonMessage}}</button>
         </form>
+        <div ng-show="authorized">
+        <a href="/auth/login">Log in to enable Add User</a>
+        </div>
+        <br/>
+        <a href="/auth/logout">Log out</a>
+
     </div>
     <div class="col-xs-12" style="height:30px;"></div>
     <div class = "well col-md-6">

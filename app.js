@@ -1,20 +1,28 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express')
+const path = require('path')
+const favicon = require('serve-favicon')
+const logger = require('morgan')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const session = require('express-session')
+const passport = require('passport')
+
+//flash is used with passport to pop up messages
+const flash = require('connect-flash')
+//and flash requires session. We'll also want passport-session.
+
 
 //var routes = require('./routes/index');
-var api = require('./routes/api');
+const api = require('./routes/api')
+const auth = require('./auth')
 
-var app = express();
+
+const app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
-goDoTwitterAuth({secret: 'fsdijfsdlkfjsldf', authToken: 'skjdghshfw9hf89'});
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -28,14 +36,20 @@ app.use(function (req, res, next) {
 });
 //Pass anything other than /api to Angular
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ secret: 'this is not a secret' }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(flash())
 
 //Back end APIis sered on the /api route
 app.use('/api', api);
+app.use('/auth', auth)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
+  const err = new Error('Not Found')
+    err.status = 404;
   next(err);
 });
 

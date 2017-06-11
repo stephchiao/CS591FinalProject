@@ -1,8 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
+//Helper for authorization
+const authorized = require('./authCheck')
+
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://localhost/cs411')
+if (!mongoose.connection.db) {
+mongoose.connect('mongodb://localhost/cs591')
+}
 const db = mongoose.connection
 const Schema = mongoose.Schema
 const personSchema = new Schema({
@@ -12,8 +17,9 @@ const personSchema = new Schema({
 })
 const people = mongoose.model('people', personSchema)
 
-// POST Create a new user
-router.post('/db', function (req, res, next) {
+
+// POST Create a new user (only available to logged-in users)
+router.post('/db', authorized,  function (req, res, next) {
     aPerson = new people(
         req.body
     )
@@ -99,4 +105,7 @@ let findByName = function (checkName) {
         })
     })
 }
+
 module.exports = router
+
+//TODO Route to log out (req.logout())
