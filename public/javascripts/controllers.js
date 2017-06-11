@@ -32,7 +32,7 @@ angular.module('cs411', [])
                         },
                         function (error) {
                             if (error.status === 401) {
-                                $scope.authorized = "false"
+                                $scope.authorized = false
                                 $scope.h2message = "Not authorized to add "
                                 console.log(error)
                             }
@@ -90,25 +90,60 @@ angular.module('cs411', [])
             }
             $http(request)
                 .then(function (response) {
-                    $scope.inputForm.$setPristine()
-                    $scope.name = $scope.UID = $scope.department = ''
-                    $scope.getUsers()
-                })
-
+                        $scope.inputForm.$setPristine()
+                        $scope.name = $scope.UID = $scope.department = ''
+                        $scope.getUsers()
+                    }
+                )
         }
 
         $scope.initApp = function () {
             $scope.buttonState = "create"
             $scope.h2message = "Add user"
             $scope.buttonMessage = "Add User"
+            $scope.authorized = false
+            $scope.showLogin = false
             $scope.getUsers()
         }
-    })
-    //This controller handles toggling the display of details in the user list
-    .controller('listController', function ($scope) {
-        $scope.display = false
 
-        $scope.showInfo = function () {
-            $scope.display = !$scope.display
+        $scope.logout = function () {
+            $http.get('/auth/logout')
+                .then(function (response) {
+                    $scope.authorized = false
+                })
         }
+        $scope.login = function () {
+            const request = {
+                method: 'post',
+                url   : 'http://localhost:3000/auth/login',
+                data  : {
+                    username: $scope.username,
+                    password: $scope.password
+                }
+            }
+            $http(request)
+                .then(function (response) {
+                        $scope.authorized = true
+                        $scope.showLogin = false
+                    },
+                    function (err) {
+                        $scope.authorized = false
+                    }
+                )
+        }
+
+        $scope.showLoginForm = function () {
+            $scope.showLogin = true
+        }
+
     })
+
+
+        //This controller handles toggling the display of details in the user list
+            .controller('listController', function ($scope) {
+                $scope.display = false
+
+                $scope.showInfo = function () {
+                    $scope.display = !$scope.display
+                }
+            })

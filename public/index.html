@@ -38,12 +38,20 @@
             </div>
             <button type="submit" class="btn btn-primary" ng-disabled="inputForm.$invalid" ng-click="createUser()">{{buttonMessage}}</button>
         </form>
-        <div ng-show="authorized">
-        <a href="/auth/login">Log in to enable Add User</a>
+        <br/>
+        <div ng-hide="authorized">
+            <button class="btn btn-sm" ng-click="showLoginForm()">Log in to enable Add User</button>
+        </div>
+        <div ng-show="showLogin">
+           Username: <input type="text" ng-model="username">
+            Password: <input type="password" ng-model="password">
+            <button class="btn btm-sm" ng-click="login()">Log in</button>
+
         </div>
         <br/>
-        <a href="/auth/logout">Log out</a>
-
+        <div ng-show="authorized">
+        <button class="btn btn-sm" ng-click="logout()">Log out</button>
+        </div>
     </div>
     <div class="col-xs-12" style="height:30px;"></div>
     <div class = "well col-md-6">
