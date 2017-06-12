@@ -47,8 +47,8 @@ user.methods.checkPassword = function (password) {
     return testHash === this.passwordHash
 }
 //The mongo collection will be users in the cs591 database...Mongoose adds an 's'
-//to the end of the model name automatically
+//to the end of the model name automatically unless the collection ends in a digit
 //
-const User = mongoose.model('user2', user)
+const User = mongoose.model('user', user)
 
 module.exports = User

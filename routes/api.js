@@ -6,7 +6,7 @@ const authorized = require('./authCheck')
 
 const mongoose = require('mongoose')
 if (!mongoose.connection.db) {
-mongoose.connect('mongodb://localhost/cs591')
+    mongoose.connect('mongodb://localhost/cs591')
 }
 const db = mongoose.connection
 const Schema = mongoose.Schema
@@ -19,7 +19,7 @@ const people = mongoose.model('people', personSchema)
 
 
 // POST Create a new user (only available to logged-in users)
-router.post('/db', authorized,  function (req, res, next) {
+router.post('/db', authorized, function (req, res, next) {
     aPerson = new people(
         req.body
     )

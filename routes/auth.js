@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 //Connect to user database
-//const User = require('./User')
+//const User = require('../models/User')
 const User = require('../models/UserWithCrypto')
 
 //Use Passport for authentication - this version uses a local mongo collection
