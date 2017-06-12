@@ -16,7 +16,6 @@ const passport = require('passport')
 const TwitterStrategy = require('passport-twitter').Strategy
 
 const passportOptions = {
-    passReqToCallback: true,
     consumerKey: twitterConfig.CONSUMER_KEY,
     consumerSecret: twitterConfig.CONSUMER_SECRET,
     callbackURL: twitterConfig.CALLBACK_URL
@@ -28,18 +27,43 @@ const passportOptions = {
 //
 passport.use(new TwitterStrategy(passportOptions,
     function (token, tokenSecret, profile, done) {
-        /*       User.findOrCreate({twitterID: profile.id}).exec()
-         .then(function (err, user) {
-         return (done(err, user))
-         })
-         .catch(function (err) {
-         //This is a db error, not a 'not found'
-         console.log(err)
-         })
-         })*/
-        return done(null, profile)
-    }
-))
+        User.findOneAndUpdate({twitterID: profile.id},
+            {
+                twitterID: profile.id,
+                name: profile.displayName,
+                username: profile.username
+            },
+            {'upsert': 'true'},
+            function (err, result) {
+                if (err) {
+                    console.log(err)
+                    return done(err, null)
+                }
+                else {
+                    return done(null, profile)
+                }
+            })
+    })
+)
+
+
+/*
+ User.findOrCreate({
+ twitterID: profile.id,
+ name: profile.displayName,
+ username: profile.username
+ })
+ .then(function (err, user) {
+ return done(err, user)
+ })
+ .catch(function (err) {
+ //This is a db error, not a 'not found'
+ console.log(err)
+ })
+
+ return done(null, profile)
+ */
+
 
 passport.serializeUser(function (user, done) {
     console.log('in serialize, setting id on session:', user.id)
@@ -48,7 +72,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(function (id, done) {
     console.log('in deserialize with id', id)
-    User.findById(id, function (err, user) {
+    User.findOne({twitterID: id}, function (err, user) {
         done(err, user)
     })
 })
@@ -60,9 +84,9 @@ router.post('/login',
     })
 )
 
+//For now use the server-side Pug page to do a login
 router.get('/login', function (req, res, next) {
-    console.log(req.flash('error'))
-    res.render('login', {message: req.flash('message')})
+    res.render('login')
 })
 router.get('/success', function (req, res, next) {
     res.redirect('/')
@@ -94,14 +118,14 @@ router.get('/register', function (req, res, next) {
 
 //Step 1
 router.get('/twitter',
-    passport.authenticate('twitter'));
+    passport.authenticate('twitter'))
 
 //Step 2
 router.get('/callback',
-    passport.authenticate('twitter', { failureRedirect: '/login' }),
-    function(req, res) {
-        res.redirect('/');
-    });
-
+    passport.authenticate('twitter',
+        {failureRedirect: '/login',}),
+    function (req, res) {
+        res.redirect('/')
+    })
 
 module.exports = router

@@ -5,7 +5,7 @@
  */
 const mongoose = require('mongoose')
 const crypto = require('crypto')
-const findOrCreate = require('mongoose-findorcreate')
+//const findOrCreate = require('mongoose-findorcreate')
 
 //Set up ES6 Promises
 mongoose.Promise = global.Promise
@@ -36,7 +36,7 @@ const user = new Schema({
 })
 
 //Set up the findOrCreate plugin
-user.plugin(findOrCreate)
+//user.plugin(findOrCreate)
 
 /*
  Add a method to the schema that takes a plaintext password and stores the hashed

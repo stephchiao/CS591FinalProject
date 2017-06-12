@@ -162,12 +162,20 @@ angular.module('cs411', [])
             $scope.showLogin = true
         }
 
-        $scope.doTwitterAuth = function () {
-            $http.get('/auth/twitter')
+  /*      $scope.doTwitterAuth = function () {
+            $http.get('/auth/login')
             .then(function (response) {
                 $scope.twitter = true
+                $scope.authorized = true
+                alert('out of twitter')
             })
         }
+*/
+        $scope.doTwitterAuth = function ( ) {
+            var openUrl = '/auth/twitter/'
+            window.$windowScope = $scope;
+            window.open(openUrl, "Log in nwith Twitter", "width=500, height=500");
+        };
 
     })
 

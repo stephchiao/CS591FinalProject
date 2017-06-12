@@ -3,12 +3,4 @@ html
         title= title
         link(rel='stylesheet', href='/stylesheets/style.css')
     body
-        p Please login using the form below.
-        form(method='POST' action='/auth/login')
-            label Name
-            input(type='text' name='username')
-            label Password
-            input(type='text' name='password')
-            input(type='submit' value='Log In')
-        if message.length > 0
-            p #{message}
+    a(href="/auth/twitter") Log in with Twitter
