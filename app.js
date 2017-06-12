@@ -14,7 +14,7 @@ const flash = require('connect-flash')
 
 //var routes = require('./routes/index');
 const api = require('./routes/api')
-const auth = require('./auth')
+const auth = require('./routes/auth')
 
 
 const app = express()
