@@ -48,7 +48,10 @@
         </form>
         <br/>
         <div ng-hide="authorized">
-            <button class="btn btn-sm" ng-click="showLoginForm()">Log in /register to enable Add User</button>
+            <button class="btn btn-sm" ng-click="doTwitterAuth()">Log in with Twitter</button>
+            <br/>
+            Status: {{twitter}}
+<!--            <button class="btn btn-sm" ng-click="showLoginForm()">Log in /register to enable Add User</button> -->
         </div>
         <div ng-show="showLogin">
             Name: <input type="text" ng-model="name">

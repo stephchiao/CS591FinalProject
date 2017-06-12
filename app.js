@@ -1,3 +1,7 @@
+/*
+Updating the app to use Twitter OAUTH 1.0a authentication. Nothing to change here but one
+mount point; everything will be done in authTwitter, which is mounted on /auth
+ */
 const express = require('express')
 const path = require('path')
 const favicon = require('serve-favicon')
@@ -14,7 +18,7 @@ const flash = require('connect-flash')
 
 //var routes = require('./routes/index');
 const api = require('./routes/api')
-const auth = require('./routes/auth')
+const auth = require('./routes/authTwitter')
 
 
 const app = express()
@@ -30,10 +34,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(function (req, res, next) {
-  console.log('Received ' + req.method + ' for ' + req.url);
-  next();
-});
+
 //Pass anything other than /api to Angular
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'this is not a secret' }));

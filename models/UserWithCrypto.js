@@ -5,6 +5,7 @@
  */
 const mongoose = require('mongoose')
 const crypto = require('crypto')
+const findOrCreate = require('mongoose-findorcreate')
 
 //Set up ES6 Promises
 mongoose.Promise = global.Promise
@@ -17,6 +18,7 @@ if (!mongoose.connection.db) {
 const db = mongoose.connection
 
 const Schema = mongoose.Schema
+
 const user = new Schema({
     username    : {
         type    : String,
@@ -29,8 +31,12 @@ const user = new Schema({
     name: {
         type    : String,
         required: true
-    }
+    },
+    twitterID: String
 })
+
+//Set up the findOrCreate plugin
+user.plugin(findOrCreate)
 
 /*
  Add a method to the schema that takes a plaintext password and stores the hashed
@@ -49,6 +55,6 @@ user.methods.checkPassword = function (password) {
 //The mongo collection will be users in the cs591 database...Mongoose adds an 's'
 //to the end of the model name automatically unless the collection ends in a digit
 //
-const User = mongoose.model('user', user)
+const User = mongoose.model('tweets', user)
 
 module.exports = User

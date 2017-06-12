@@ -162,6 +162,13 @@ angular.module('cs411', [])
             $scope.showLogin = true
         }
 
+        $scope.doTwitterAuth = function () {
+            $http.get('/auth/twitter')
+            .then(function (response) {
+                $scope.twitter = true
+            })
+        }
+
     })
 
 
