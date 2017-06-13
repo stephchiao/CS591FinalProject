@@ -94,6 +94,7 @@ router.get('/success', function (req, res, next) {
 
 router.get('/logout', function (req, res, next) {
     req.logOut()
+    res.clearCookie()
     res.status = 401
     res.redirect('/')
 })
@@ -125,6 +126,7 @@ router.get('/callback',
     passport.authenticate('twitter',
         {failureRedirect: '/login',}),
     function (req, res) {
+    res.cookie('authStatus', 'true')
         res.redirect('/')
     })
 

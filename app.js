@@ -35,13 +35,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-//Pass anything other than /api to Angular
+//Pass anything other than mounted routes to Angular
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'this is not a secret' }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(flash())
 
 //Back end APIis sered on the /api route
 app.use('/api', api);

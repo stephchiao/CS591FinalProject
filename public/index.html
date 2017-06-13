@@ -15,6 +15,10 @@
             crossorigin="anonymous"></script>
     <!-- Angular (minified) -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-cookies.js"></script>
+
+
     <!--Controllers for this page/app -->
     <script src="javascripts/controllers.js"></script>
     <!-- Local styles -->
@@ -48,11 +52,8 @@
         </form>
         <br/>
         <div ng-hide="authorized">
-            <a href="/auth/twitter">Log in with Twitter</a>
             <br/>
-            Status: {{twitter}}
-<!--            <button class="btn btn-sm" ng-click="showLoginForm()">Log in /register to enable Add User</button> -->
-            <button class="btn btn-sm" ng-click="doTwitterAuth()">Log in with Twitter</button>
+            <button type="submit" class="btn btn-primary" ng-click="doTwitterAuth()">Log in with Twitter</button>
         </div>
         <div ng-show="showLogin">
             Name: <input type="text" ng-model="name">
