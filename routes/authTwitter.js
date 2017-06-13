@@ -6,25 +6,27 @@ const router = express.Router()
 const twitterConfig = require('../config/twitter')
 
 //Connect to user database
-//No reason not to use the crypto version of the user model
+//No reason not to use the crypto version of the user model (because crypto)
 const User = require('../models/UserWithCrypto')
 
-//Set up an options doc for the strategy. Note: Passing req to passport is NOT well documented; it is briefly mentioned
-//in the description of the Twitter strategy.
 
 const passport = require('passport')
 const TwitterStrategy = require('passport-twitter').Strategy
 
+//Set up an options doc for the strategy.
+//
 const passportOptions = {
     consumerKey: twitterConfig.CONSUMER_KEY,
     consumerSecret: twitterConfig.CONSUMER_SECRET,
     callbackURL: twitterConfig.CALLBACK_URL
 }
 
-//Once authenticated, Twitter will pass back tokens and the user's Twitter profile,
-//which we will use as a key in the database
-//NOTE: The mongoose model has a plugin, findOrCreate, that simplifies the logic of this operation
-//
+/*
+ Once authenticated, Twitter will pass back oauth tokens and the user's Twitter profile,
+ which we will use as a key in the database. Passport uses the Twitter IDfrom the
+ profile in its serialize/deserialize methods
+ */
+
 passport.use(new TwitterStrategy(passportOptions,
     function (token, tokenSecret, profile, done) {
         User.findOneAndUpdate({twitterID: profile.id},
@@ -46,25 +48,6 @@ passport.use(new TwitterStrategy(passportOptions,
     })
 )
 
-
-/*
- User.findOrCreate({
- twitterID: profile.id,
- name: profile.displayName,
- username: profile.username
- })
- .then(function (err, user) {
- return done(err, user)
- })
- .catch(function (err) {
- //This is a db error, not a 'not found'
- console.log(err)
- })
-
- return done(null, profile)
- */
-
-
 passport.serializeUser(function (user, done) {
     console.log('in serialize, setting id on session:', user.id)
     done(null, user.id)
@@ -77,56 +60,31 @@ passport.deserializeUser(function (id, done) {
     })
 })
 
-router.post('/login',
-    passport.authenticate('local', {
-        successRedirect: '/auth/success',
-        failureRedirect: '/auth/login',
-    })
-)
 
-//For now use the server-side Pug page to do a login
-router.get('/login', function (req, res, next) {
-    res.render('login')
-})
 router.get('/success', function (req, res, next) {
     res.redirect('/')
 })
 
 router.get('/logout', function (req, res, next) {
-    req.logOut()
-    res.clearCookie()
-    res.status = 401
-    res.redirect('/')
-})
-
-router.post('/register', function (req, res, next) {
-    let user = new User({
-        'username': req.body.username,
-        'name': req.body.name
-    })
-    user.setPassword(req.body.password)
-    user.save()
-        .then(function (err, result) {
+    User.findOneAndRemove({twitterID: req.user.twitterID})
+        .then(function (err, response) {
+            req.logOut()
+            res.clearCookie()
+            res.status = 401
             res.redirect('/')
         })
-        .catch(function (err, result) {
-            res.send({message: 'Error in save', error: err})
-        })
-})
-router.get('/register', function (req, res, next) {
-    res.render('register')
 })
 
-//Step 1
+//OAuth Step 1
 router.get('/twitter',
     passport.authenticate('twitter'))
 
-//Step 2
+//OAuth Step 2
 router.get('/callback',
     passport.authenticate('twitter',
         {failureRedirect: '/login',}),
     function (req, res) {
-    res.cookie('authStatus', 'true')
+        res.cookie('authStatus', 'true')
         res.redirect('/')
     })
 

@@ -106,9 +106,7 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
             $scope.getUsers()
             //Grab cookies if present
             let authCookie = $cookies.get('authStatus')
-            if (authCookie === 'true') {$scope.authorized = true} else {$scope.authorized = false}
-            console.log("In init method, auth is", $scope.authorized)
-
+            $scope.authorized = !!authCookie
         }
 
         $scope.logout = function () {
@@ -198,7 +196,7 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
     let authStatus =  $location.search();
 console.log(authStatus)
     console.log('In authController')
-    $scope.authorized = (authStatus === 'true') ? true :false
+    $scope.authorized = !!authStatus
 
 })
 
