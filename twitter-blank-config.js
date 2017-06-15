@@ -1,6 +1,6 @@
 /*
  Configuration information for Twitter API authorization. DO NOT push this to github
- Note: rename this file to twitter.js to match the require
+ Note: rename this file to twitter.js to match the require AND move to /config folder
  */
 
 const Twitter = {
