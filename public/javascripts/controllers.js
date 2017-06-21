@@ -1,11 +1,5 @@
 angular.module('cs411', ['ngRoute', 'ngCookies'])
-    .directive('nameDisplay', function () {
-        return {
-            scope: true,
-            restrict: 'EA',
-            template: "<b>This can be anything {{name}}</b>"
-        }
-    })
+
     .controller('cs411ctrl', function ($scope, $http, $cookies) {
 
         //CREATE (POST)
@@ -97,7 +91,7 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
                 )
         }
 
-        $scope.initApp = function ( ) {
+        $scope.initApp = function () {
             $scope.buttonState = "create"
             $scope.h2message = "Add user"
             $scope.buttonMessage = "Add User"
@@ -164,7 +158,7 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
         $scope.showLoginForm = function () {
             $scope.showLogin = true
         }
-        
+
         $scope.doTwitterAuth = function () {
             var openUrl = '/auth/twitter/'
             //Total hack, this:
@@ -174,38 +168,44 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
         }
 
     })
-    .config(['$routeProvider',
-        function ($routeProvider) {
-            $routeProvider
-                .when('/:status', {
-                templateUrl: '',
-                controller: 'authController'
+
+    //Configure internal routes
+    //
+    .config(['$routeProvider', function ($routeProvider) {
+        $routeProvider
+            .when('/about', {
+                templateUrl: 'components/about.html',
             })
-                .when(':status', {
-                    templateUrl: '',
-                    controller: 'authController'
-                })
+
+            .when('/BU', {
+                templateUrl: 'components/BU.html',
+                controller: 'BUController'
+            })
+
             .otherwise({
                 redirectTo: '/'
             })
-        }])
+    }])
+
+    .controller('authController', function ($scope, $location) {
+
+        let authStatus = $location.search()
+        console.log(authStatus)
+        console.log('In authController')
+        $scope.authorized = !!authStatus
+
+    })
+    .controller('BUController', function ($scope) {
+$scope.message = "You MUSTgive money to the alumni fund!"
+        }
+    )
 
 
-.controller('authController', function ($scope) {
+    //This controller handles toggling the display of details in the user list
+    .controller('listController', function ($scope) {
+        $scope.display = false
 
-    let authStatus =  $location.search();
-console.log(authStatus)
-    console.log('In authController')
-    $scope.authorized = !!authStatus
-
-})
-
-
-//This controller handles toggling the display of details in the user list
-.controller('listController', function ($scope) {
-    $scope.display = false
-
-    $scope.showInfo = function () {
-        $scope.display = !$scope.display
-    }
-})
+        $scope.showInfo = function () {
+            $scope.display = !$scope.display
+        }
+    })
