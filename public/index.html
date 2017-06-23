@@ -19,6 +19,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-cookies.js"></script>
 
 
+
     <!--Controllers for this page/app -->
     <script src="javascripts/controllers.js"></script>
     <!-- Local styles -->
@@ -31,17 +32,17 @@
     <img src="/images/master-logo.gif"><span class="largeText">  Department of Computer Science</span>
     <h2>{{h2message}} {{name}}</h2>
     <div>
-        <form class="form-inline" name="inputForm">
+        <form class="form-inline" name="inputForm" >
             <div class="form-group">
-                <label class="sr-only" for="formName">Email address</label>
+                <label class="sr-only" for="formName">Name</label>
                 <input type="text" class="form-control" id="formName" placeholder="Enter name" ng-model="name" required>
             </div>
             <div class="form-group">
-                <label class="sr-only" for="formUID">Email address</label>
+                <label class="sr-only" for="formUID">UID</label>
                 <input type="text" class="form-control" id="formUID" placeholder="Enter UID" ng-model="UID" required>
             </div>
             <div class="form-group">
-                <label class="sr-only" for="formDepartment">Password</label>
+                <label class="sr-only" for="formDepartment">Department</label>
                 <input type="text" class="form-control" id="formDepartment" placeholder="Enter Department"
                        ng-model="department" required>
                 <input type="hidden" value="{{user._id}}">
@@ -85,13 +86,17 @@
             </li>
         </ul>
     </div>
+    <!-- A couple of links to fire off the partials (components) -->
+    <br/>
+    <a href = "/#about">About the app</a>
+    <a href = "/#BU">About BU</a>
+    <!-- ng-view defines the location for partials -->
+    <div ng-view></div>
 </div>
-<!-- A couple of links to fire off the partials (components) -->
-<br/>
-<a href = "/#about">About the app</a>
-<a href = "/#BU">About BU</a>
-<!-- ng-view defines the location for partials -->
-<div ng-view></div>
 
 </body>
 </html>
+
+
+
+Polyfill

@@ -19,6 +19,7 @@ const flash = require('connect-flash')
 //var routes = require('./routes/index');
 const api = require('./routes/api')
 const auth = require('./routes/authTwitter')
+const rp = require('./routes/request-promises')
 
 
 const app = express()
@@ -44,6 +45,7 @@ app.use(passport.session());
 //Back end APIis sered on the /api route
 app.use('/api', api);
 app.use('/auth', auth)
+app.use('/rp', rp)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -75,6 +77,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

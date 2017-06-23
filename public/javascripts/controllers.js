@@ -91,6 +91,23 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
                 )
         }
 
+      /*  $scope.getAuth = function () {
+            const request = {
+                method: 'get',
+                url: 'http://localhost:3000/api/db/auth'
+            }
+            $http.request(request)
+                .then(function (err, response) {
+                    if (err) {
+                        $scope.authorized = false
+                    }
+
+                    else {
+                        $scope.authorized = true
+                    }
+                })
+
+*/
         $scope.initApp = function () {
             $scope.buttonState = "create"
             $scope.h2message = "Add user"
@@ -98,6 +115,7 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
             $scope.authorized = false
             $scope.showLogin = false
             $scope.getUsers()
+//            $scope.getAuth()
             //Grab cookies if present
             let authCookie = $cookies.get('authStatus')
             $scope.authorized = !!authCookie
