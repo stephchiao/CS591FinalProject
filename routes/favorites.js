@@ -1,3 +1,5 @@
+// contains requests for accessing mongo database
+
 const express = require('express')
 const router = express.Router()
 
@@ -10,68 +12,45 @@ if (!mongoose.connection.db) {
 }
 const db = mongoose.connection
 const Schema = mongoose.Schema
-const personSchema = new Schema({
-    name      : String,
-    UID       : String,
-    department: String,
-    favorites : Object  // list of json objects; each json object contains recipe information
+const recipeSchema = new Schema({
+    title      : String,
+    ID         : Number,
+    calories   : Number
 })
-const people = mongoose.model('people', personSchema)
-// const recipeSchema = new Schema({
-//     userID: Number,
-//     title      : String,
-//     recipeID       : Number,
-//     calories: Number
-// })
-// const recipe = mongoose.model('recipe', recipeSchema)
+const recipe = mongoose.model('recipe',  recipeSchema)
 
 
-// // POST Create recipe in favorites (only available to logged in users)
-// router.post('/db', authorized, function (req, res, next) {
-//     aRecipe = new recipe(
-//         req.body
-//     )
-//     aPerson.save(function (err) {
-//         if (err) {
-//             res.send(err)
-//         }
-//         //send back the new person
-//         else {
-//             res.send(aRecipe)
-//         }
-//     })
-// })
-
-// POST Create a new user (only available to logged-in users)
+// POST Create recipe in favorites (only available to logged in users)
 router.post('/db', authorized, function (req, res, next) {
-    aPerson = new people(
+    aRecipe = new recipe(
         req.body
     )
-    aPerson.save(function (err) {
+    aRecipe.save(function (err) {
         if (err) {
             res.send(err)
         }
         //send back the new person
         else {
-            res.send(aPerson)
+            res.send(aRecipe)
         }
     })
 })
 
-// // GET Fetch all recipes in favorites
-// router.get('/db', function (req, res, next) {
-//     recipe.find({}, function (err, results) {
-//         res.json(results)
-//     })
-// })
 
-//GET Fetch all users
+// GET Fetch all recipes in favorites
 router.get('/db', function (req, res, next) {
-    people.find({}, function (err, results) {
+    recipe.find({}, function (err, results) {
         res.json(results)
     })
-
 })
+
+// //GET Fetch all users
+// router.get('/db', function (req, res, next) {
+//     people.find({}, function (err, results) {
+//         res.json(results)
+//     })
+//
+// })
 
 /*
  //GET Fetch single user, match /users/db/Frank
@@ -109,13 +88,18 @@ router.put('/db/:_id', function (req, res, next) {
 })
 
 
+
+
 //DELETE Delete the specified user
 router.delete('/db/:_id', function (req, res, next) {
-    people.findByIdAndRemove(req.params._id, function (err, result) {
+    console.log("deleting");
+    recipe.findByIdAndRemove(req.params._id, function (err, result) {
         if (err) {
+            console.log('error deleting!!');
             res.json({message: 'Error deleting'})
         }
         else {
+            console.log("success!!");
             res.json({message: 'success'})
         }
     })

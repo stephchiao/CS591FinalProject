@@ -20,6 +20,10 @@ const flash = require('connect-flash')
 const api = require('./routes/api')
 const auth = require('./routes/authTwitter')
 const rp = require('./routes/request-promises')
+const googleApi = require('./routes/googleapi')
+const fitnessApi = require('./routes/fitnessapi')
+const favorites = require('./routes/favorites')
+
 
 
 const app = express()
@@ -27,7 +31,6 @@ const app = express()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -38,7 +41,7 @@ app.use(cookieParser());
 
 //Pass anything other than mounted routes to Angular
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'this is not a secret' }));
+app.use(session({ secret: 'SECRET'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -46,6 +49,9 @@ app.use(passport.session());
 app.use('/api', api);
 app.use('/auth', auth)
 app.use('/rp', rp)
+app.use('/google', googleApi)
+app.use('/fitness', fitnessApi)
+app.use('/favorites', favorites)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -77,5 +83,8 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+
 
 module.exports = app;

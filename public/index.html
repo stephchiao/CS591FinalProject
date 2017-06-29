@@ -51,10 +51,24 @@
                 {{buttonMessage}}
             </button>
         </form>
+
+        <form>
+            <div>
+                <label >Search for recipe</label>
+                <input type="text" ng-model="searchItem">
+            </div>
+            <button type="submit" ng-click="searchRecipe()">
+                Go go go
+            </button>
+        </form>
+        <p>{{ recipeList }}</p>
+        <p>Showing results for {{ searchItem }}</p>
+
         <br/>
         <div ng-hide="authorized">
             <br/>
             <button type="submit" class="btn btn-primary" ng-click="doTwitterAuth()">Log in with Twitter</button>
+            <button type="submit" class="btn btn-primary" ng-click="doGoogleAuth()">Log in with Google</button>
         </div>
         <div ng-show="showLogin">
             Name: <input type="text" ng-model="name">
@@ -72,7 +86,8 @@
     <div class="col-xs-12" style="height:30px;"></div>
     <div class="well col-md-6">
         <ul class="list-group">
-            <li ng-controller="listController" class="list-group-item largeText" ng-repeat="user in users">{{user.name}}
+            <li ng-controller="listController" class="list-group-item largeText" ng-repeat="user in users">
+                {{user.name}}
                 <span ng-show="display"> {{user.UID}} {{user.department}}</span>
                 <button class="btn btn-sm pull-right btn-danger" ng-click="deleteUser(user._id);">
                     <span class="glyphicon glyphicon-trash"></span>
@@ -86,6 +101,71 @@
             </li>
         </ul>
     </div>
+
+    <div class="well col-md-6">
+        <h3>RESULTS</h3>
+        <ul class="list-group">
+            <li ng-controller="listController" class="list-group-item largeText" ng-repeat="recipe in recipes">
+                {{recipe.title}} {{ recipe.id }} {{ recipe.calories }}
+                <span ng-show="display"> {{user.UID}} {{user.department}}</span>
+                <button class="btn btn-sm pull-right btn-danger" ng-click="deleteUser(user._id);">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-info" ng-click="showInfo(user._id);">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-warning" ng-click="setUserUpdate(user);">
+                    <span class="glyphicon glyphicon-hand-up"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-favorite" ng-click="createFavorite(recipe);">
+                    <span class="glyphicon glyphicon-heart"></span>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="well col-md-6">
+        <h3>EXERCISES</h3>
+        <ul class="list-group">
+            <li ng-controller="listController" class="list-group-item largeText" ng-repeat="exercise in exercises">
+                {{exercise.name}}
+                <span ng-show="display"> {{user.UID}} {{user.department}}</span>
+                <button class="btn btn-sm pull-right btn-danger" ng-click="deleteUser(user._id);">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-info" ng-click="showInfo(user._id);">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-warning" ng-click="setUserUpdate(user);">
+                    <span class="glyphicon glyphicon-hand-up"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-favorite" ng-click="createFavorite(recipe);">
+                    <span class="glyphicon glyphicon-heart"></span>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="well col-md-6">
+        <h3>FAVORITES</h3>
+        <ul class="list-group">
+            <li ng-controller="listController" class="list-group-item largeText" ng-repeat="favorite in favorites">
+                {{favorite.title}} {{ favorite.id }} {{ favorite.calories}}
+                <span ng-show="display"> {{user.UID}} {{user.department}}</span>
+                <button class="btn btn-sm pull-right btn-danger" ng-click="deleteFavorite(favorite._id);">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-info" ng-click="showInfo(user._id);">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+                <button class="btn btn-sm pull-right btn-warning" ng-click="setUserUpdate(user);">
+                    <span class="glyphicon glyphicon-hand-up"></span>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+
     <!-- A couple of links to fire off the partials (components) -->
     <br/>
     <a href = "/#about">About the app</a>
@@ -97,6 +177,3 @@
 </body>
 </html>
 
-
-
-Polyfill

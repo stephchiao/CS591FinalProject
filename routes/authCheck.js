@@ -5,6 +5,8 @@ check the user's login status on the front end, too, possibly to hide
 parts of the interface from unauthenticated users.
  */
 
+console.log('authCheck.js');
+
 const checkAuthorization = function (req, res, next) {
     if (!req.isAuthenticated())
         res.sendStatus(401)

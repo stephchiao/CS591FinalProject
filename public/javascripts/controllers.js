@@ -2,6 +2,7 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
 
     .controller('cs411ctrl', function ($scope, $http, $cookies) {
 
+
         //CREATE (POST)
         $scope.createUser = function () {
             if ($scope.dbID) {
@@ -34,6 +35,52 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
                     )
             }
         }
+
+        //CREATE (POST): create favorite in database
+        $scope.createFavorite = function (recipe) {
+            const request = {
+                method: 'post',
+                url: 'http://localhost:3000/favorites/db',
+                data: {
+                    title: recipe.title,
+                    ID: recipe.id,
+                    calories: recipe.calories
+                }
+            }
+            $http(request)
+                .then(function (response) {
+                        $scope.inputForm.$setPristine()
+                        $scope.title = $scope.id = $scope.calories = ''
+                        $scope.getFavorites()
+                        console.log(response)
+                    },
+                    function (error) {
+                        if (error.status === 401) {
+                            $scope.authorized = false
+                            $scope.h2message = "Must be logged in to add to favorites"
+                            console.log(error)
+                        }
+                    }
+                )
+            // }
+        }
+
+        //DELETE (DELETE) from favorites
+        $scope.deleteFavorite = function (_id) {
+
+            const request = {
+                method: 'delete',
+                url: 'http://localhost:3000/favorites/db/' + _id,
+            }
+            $http(request)
+                .then(function (response) {
+                        $scope.inputForm.$setPristine()
+                        $scope.title = $scope.id = $scope.calories = ''
+                        $scope.getFavorites()
+                    }
+                )
+        }
+
         //READ (GET)
         $scope.getUsers = function () {
             $http.get('http://localhost:3000/api/db')
@@ -42,6 +89,17 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
 
                 })
         }
+
+        //READ (GET) show updated list of favorites
+        $scope.getFavorites = function () {
+            $http.get('http://localhost:3000/favorites/db')
+                .then(function (response) {
+                    $scope.favorites = response.data
+
+                })
+        }
+
+
         //UPDATE (PUT)
         $scope.setUserUpdate = function (user) {
             $scope.buttonMessage = "Update User"
@@ -91,23 +149,31 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
                 )
         }
 
-      /*  $scope.getAuth = function () {
-            const request = {
-                method: 'get',
-                url: 'http://localhost:3000/api/db/auth'
-            }
-            $http.request(request)
-                .then(function (err, response) {
-                    if (err) {
-                        $scope.authorized = false
-                    }
 
-                    else {
-                        $scope.authorized = true
-                    }
-                })
+        // $scope.addToFavorites = function (recipe) {
+        //     const request = {
+        //         method: 'post',
+        //         url: 'http://localhost:3000/api/db/'
+        //     }
+        // }
 
-*/
+        /*  $scope.getAuth = function () {
+         const request = {
+         method: 'get',
+         url: 'http://localhost:3000/api/db/auth'
+         }
+         $http.request(request)
+         .then(function (err, response) {
+         if (err) {
+         $scope.authorized = false
+         }
+
+         else {
+         $scope.authorized = true
+         }
+         })
+
+         */
         $scope.initApp = function () {
             $scope.buttonState = "create"
             $scope.h2message = "Add user"
@@ -178,13 +244,73 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
         }
 
         $scope.doTwitterAuth = function () {
+            console.log('going to /auth/twitter 1');
             var openUrl = '/auth/twitter/'
+            //Total hack, this:
+            $scope.authorized = true
+            window.location.replace(openUrl)
+            console.log('going to /auth/twitter 2');
+        }
+
+        $scope.doGoogleAuth = function () {
+            var openUrl = '/auth/google/'
             //Total hack, this:
             $scope.authorized = true
             window.location.replace(openUrl)
 
         }
 
+        // GET for recipe search and exercises
+        $scope.searchRecipe = function () {
+
+            const request = {
+                method: 'get',
+                url: '/google/',
+                data: {
+                    name: $scope.name,
+                    username: $scope.username,
+                    password: $scope.password
+                },
+                params: {
+                    searched: $scope.searchItem
+                }
+            }
+            $http(request)
+                .then(function (response) {
+                    $scope.recipes = response.data
+                    console.log($scope.recipes)
+                })
+
+            $http.get('/fitness')
+                .then(function (response) {
+                    $scope.exercises = response.data
+                    console.log($scope.exercises)
+                })
+
+
+            return $scope.recipes
+        }
+
+        console.log($scope.searchItem);
+
+        // show recipes
+        $scope.recipeList = function () {
+
+
+            $scope.title = recipe.title;
+            $scope.id = recipe.id;
+            $scope.calories = recipe.calories;
+
+
+        }
+
+        // show favorites
+        $scope.getFavorites()
+
+        // show workouts
+        $scope.workoutList = function () {
+            $scope.exerciseName = exercise.name;
+        }
     })
 
     //Configure internal routes
@@ -214,7 +340,7 @@ angular.module('cs411', ['ngRoute', 'ngCookies'])
 
     })
     .controller('BUController', function ($scope) {
-$scope.message = "You MUSTgive money to the alumni fund!"
+            $scope.message = "You MUSTgive money to the alumni fund!"
         }
     )
 
