@@ -13,8 +13,5 @@ Spoonacular API: https://market.mashape.com/spoonacular/recipe-food-nutrition
 
 wger API: https://wger.de/en/software/api
 
-
-
-
-
+## 
 ** heavily edited from bucs-mean
