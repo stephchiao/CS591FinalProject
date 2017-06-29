@@ -10,6 +10,11 @@ The web app uses two APIs. Requests to the Spoonacular API are used for searchin
 
 # APIs
 Spoonacular API: https://market.mashape.com/spoonacular/recipe-food-nutrition
+
 wger API: https://wger.de/en/software/api
+
+
+
+
 
 ** heavily edited from bucs-mean
